@@ -1,0 +1,11 @@
+
+# sources.yml
+version: 2
+
+sources:
+  - name: b2bdw
+    database: staging
+
+    tables:
+      - name: customers
+			- name: suppliers

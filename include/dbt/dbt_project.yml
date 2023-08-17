@@ -1,0 +1,7 @@
+name: 'b2bdw'
+
+profile: 'b2bdw'
+
+models:
+  b2bdw:
+    materialized: table

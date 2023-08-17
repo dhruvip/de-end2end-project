@@ -21,3 +21,7 @@ bash:
 .PHONY: help
 help:
 	astro dev help
+
+.PHONY: pgdump
+pgdump:
+	pg_dump -h 127.0.0.1 -p 5433 -U appuser b2bdb --file ./init-scripts/populate_b2bdb.sql --insert

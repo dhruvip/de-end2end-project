@@ -4,3 +4,6 @@
 airflow_settings.yaml
 __pycache__/
 astro
+.notes
+trash
+init-scripts/*.csv

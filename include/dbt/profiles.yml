@@ -1,0 +1,11 @@
+b2bdw:
+  target: stg
+  outputs:
+    stg:
+      type: redshift
+      host: "{{ env_var('reshift_host') }}"
+      user: "{{ env_var('reshift_username') }}"
+      password: "{{ env_var('reshift_password') }}"
+      dbname: analytics
+      schema: staging
+      port: 5439

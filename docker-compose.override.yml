@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  b2bdb:
+    image: "postgres:13"
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: b2bdb
+    volumes:
+      - ./init-scripts/init-b2bdb.sql:/docker-entrypoint-initdb.d/init-b2bdb.sql
+      - ./init-scripts/:/docker-entrypoint-initdb.d/
+    restart: always
+    container_name: b2bdb
+    hostname: b2bdb
+    healthcheck:
+      test: ["CMD","pg_is_ready","-U","b2bdb"]
+      interval: 5s
+      retries: 5
+    networks:
+      - airflow
