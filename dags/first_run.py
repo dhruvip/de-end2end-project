@@ -3,14 +3,15 @@ from datetime import datetime, date
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
-from airflow.providers.amazon.aws.operators.redshift_sql import RedshiftSQLOperator
+# from airflow.providers.amazon.aws.operators.redshift_sql import RedshiftSQLOperator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 import pandas as pd
 import numpy as np
 from include.utils.generate_app_data import generate, fake_leads
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.models.baseoperator import chain
-
+from include.utils.helper import copy_csv_to_s3_bulk
 
 
 @dag(
@@ -37,17 +38,27 @@ def first_run():
         task_id="generate_app_data",
         python_callable=generate,
     )
-    upload_customer_to_s3 = LocalFilesystemToS3Operator(
-        task_id='upload_customer_to_s3',
-        filename='customers.csv',
-        dest_key='customers.csv',
-        dest_bucket='airflow-stg-bucket',
-        aws_conn_id='aws_conn',
+    # upload_appdata_to_s3 = LocalFilesystemToS3Operator(
+    #     task_id='upload_appdata_to_s3',
+    #     filename='/tmp/*.csv',
+    #     dest_key='*.csv',
+    #     dest_bucket='airflow-stg-bucket',
+    #     aws_conn_id='aws_conn',
+    # )
+    upload_appdata_to_s3=PythonOperator(
+        task_id='upload_appdata_to_s3',
+        python_callable=copy_csv_to_s3_bulk,
+        op_kwargs={
+            'aws_conn_id':'aws_conn', 
+            'dest_bucket':'airflow-stg-bucket',
+            'source_dir': '/tmp',
+            'dest_key': 'raw/'
+        },
     )
     create_appdb_schema= PostgresOperator(
         task_id='create_appdb_schema',
         database='b2bdb',
-        sql="/usr/local/airflow/include/sql/populate_b2bdb.sql",
+        sql="populate_b2bdb.sql",
         postgres_conn_id='appdb_conn'
     )
     create_appdb_seed_data= PostgresOperator(
@@ -72,44 +83,32 @@ def first_run():
     )
     upload_logs_to_s3 = LocalFilesystemToS3Operator(
         task_id='upload_logs_to_s3',
-        filename='web_logs.log',
+        filename='/usr/local/airflow/include/dataset/web_logs.log',
         dest_key='web_logs.log',
-        dest_bucket='airflow-stg-bucket',
+        dest_bucket='airflow-stg-buckets',
         aws_conn_id='aws_conn',
+        replace=True
     )
-    init_dw_schema = RedshiftSQLOperator(
+
+    init_dw_schema = BashOperator(
         task_id='init_dw_schema',
-        sql='init_dw_schema.sql',
-        params={
-            "schema": "staging"
-        },
-        redshift_conn_id='redshift_conn',
-    )
-    s3_to_redshift = S3ToRedshiftOperator(
-        task_id='s3_to_redshift',
-        schema='staging',
-        table='dim_customers',
-        s3_bucket='airflow-stg-bucket',
-        s3_key='customers.csv',
-        redshift_conn_id='redshift_conn',
-        aws_conn_id='aws_conn',
-        copy_options=[
-            "DELIMITER AS ','"
-        ],
-        method='REPLACE',
+        bash_command='''export PGPASSWORD=$REDSHIFT_PASSWORD; 
+        cp /usr/local/airflow/include/sql/init_dw_schema.sql .;
+        sed -i.bak "s|IAMROLE|$REDSHIFT_IAM|g" init_dw_schema.sql;
+        psql -v ON_ERROR_STOP=1 -h $REDSHIFT_HOST -U $REDSHIFT_UNAME -d $REDSHIFT_SCHEMA -p 5439 -f init_dw_schema.sql''',
+        cwd='/tmp'
     )
 
     chain(
         generate_leads_data,
         upload_leads_to_s3,
         generate_app_data,
-        upload_customer_to_s3,
+        upload_appdata_to_s3,
         create_appdb_schema,
         create_appdb_seed_data,
         generate_logs,
         upload_logs_to_s3,
-        init_dw_schema,
-        s3_to_redshift
+        init_dw_schema
     )
 
 first_run()

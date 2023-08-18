@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: b2bdb
+      POSTGRES_DB: b2b
     volumes:
       - ./init-scripts/init-b2bdb.sql:/docker-entrypoint-initdb.d/init-b2bdb.sql
       - ./init-scripts/:/docker-entrypoint-initdb.d/
@@ -15,7 +15,7 @@ services:
     container_name: b2bdb
     hostname: b2bdb
     healthcheck:
-      test: ["CMD","pg_is_ready","-U","b2bdb"]
+      test: ["CMD","pg_is_ready","-U","b2b"]
       interval: 5s
       retries: 5
     networks:
