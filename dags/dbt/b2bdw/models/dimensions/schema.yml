@@ -1,0 +1,50 @@
+version: 2
+
+sources:
+  - name: staging # can be any dumb string
+    description: 'Raw data from b2b db, logs and leads'
+    database: dev  
+    schema: staging  
+    tables:
+      - name: raw_orders
+      - name: raw_customers
+      - name: raw_products
+      - name: raw_invoice
+      - name: raw_country_codes
+      - name: raw_suppliers
+      - name: raw_company
+      - name: raw_company_products
+      - name: raw_supplier_products
+      - name: raw_events
+      - name: raw_marketing_leads
+      - name: raw_order_line_item
+
+models:
+  - name: dimensions__customers
+    description: "Table containing onboarded customer details"
+  - name: dimensions__company
+    description: "Table containing details about registered companies"
+  - name: dimensions__suppliers
+    description: "Details about the registed Suppliers"
+  - name: dimensions__company_products
+    description: "Details about the products sold bythe Company"
+  - name: dimensions__supplier_products
+    description: "Details about the products sold by the suppliers"
+  - name: dimensions__orders
+    description: "Record containing the orders registed on the b2b app"
+  - name: dimensions__invoice
+    description: "Table containing invoicing details"
+  - name: dimensions__order_line_item
+    description: "Table containing record on each product sold on the platform"
+  - name: dimensions__products
+    description: "Table containin product information"
+  - name: dimensions__datetime
+    description: "Table containing the flattened and enriched dates"
+  - name: dimensions__events
+    description: "Table containing raw webser log events"
+  - name: dimensions__mkt_leads
+    description: "Table containing raw leads data obtained from 3rd party upload"
+  - name: dimensions__products_meta
+    description: "Table containing products and its supplier details"
+  - name: dimensions__country_codes
+    description: "Table containing mapping for country codes"

@@ -1,0 +1,55 @@
+
+version: 2
+
+models:
+  - name: facts__leads
+    description: "Table containing the Leads data along with the seller, marketing campaign and customer information"
+    columns:
+      - name: lead_id
+      - name: username
+      - name: first_contact_date
+      - name: campaign_channel
+      - name: campaign_name
+      - name: order_id
+      - name: product_id
+      - name: customer_id
+      - name: customer_country_code
+      - name: seller_id
+      - name: seller_country_code
+      - name: is_supplier
+      - name: invoice_id
+      - name: final_amount
+      - name: order_created_at
+      - name: delivery_status
+      - name: payment_status
+
+  - name: facts__sales
+    description: "Sale record for each product sold, its status along with buyer and seller details"
+    columns:
+      - name: order_id
+      - name: invoice_id
+      - name: payment_status
+      - name: delivery_status
+      - name: product_id
+      - name: no_of_items
+      - name: order_created_date
+      - name: buyer_id
+      - name: seller_id
+      - name: final_invoice_amt
+      - name: brought_by
+      - name: sold_by
+
+  - name: facts__user_journey
+    description: "User Click data mapped to the buyer, seller and order data"
+    columns:
+      - name: customer_ip
+      - name: customer_uname
+      - name: first_contact_at
+      - name: status_code
+      - name: url_path
+      - name: browser
+      - name: customer_id
+      - name: customer_country_code
+      - name: product_id
+      - name: seller_id
+      - name: seller_country_code
