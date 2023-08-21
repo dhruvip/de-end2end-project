@@ -9,3 +9,4 @@ trash
 init-scripts/*.csv
 spark
 my_dbt
+documentation/Scree*
