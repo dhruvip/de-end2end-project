@@ -7,7 +7,10 @@ an Airflow connection and injecting a variable into the dbt project.
 
 from airflow.decorators import dag
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from cosmos import DbtTaskGroup, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos.airflow.task_group import DbtTaskGroup
+from cosmos.config import ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
+
+from cosmos.constants import LoadMode
 
 # adjust for other database types
 from cosmos.profiles import RedshiftUserPasswordProfileMapping

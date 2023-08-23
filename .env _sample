@@ -1,0 +1,29 @@
+PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+DBT_ROOT_PATH=/usr/local/airflow/dags/dbt
+AIRFLOW__CORE__TEST_CONNECTION=enabled
+
+# #Spark Variables
+# JAVA_HOME='/usr/local/airflow/jdk1.7.0_80'
+# PATH=$PATH:$JAVA_HOME/bin
+# SPARK_HOME='/opt/spark'
+# PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+
+#Redshift and APPdb envs
+REDSHIFT_HOST=redshift-cluster-1.catle1jmt7bu.ap-south-1.redshift.amazonaws.com
+REDSHIFT_SCHEMA=dev
+REDSHIFT_UNAME=airflow_user
+REDSHIFT_PASSWORD=airflowUser123
+REDSHIFT_IAM="'arn:aws:iam::585109897304:role/AirflowRedshift'"
+APPDB_UNAME=appuser
+APPDB_PASSWORD=appuser@123
+APPDB_HOST=b2bdb
+APPDB_DATABASE=b2bdb
+
+DBT_PROFILES_DIR=/usr/local/airflow/dags/dbt/b2bdw
+ACCESS_KEY_ID=AKIAYQO2EQBMKY7CNUDY
+SECRET_ACCESS_KEY=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
+AIRFLOW_CONN_AWS_DEFAULT='{
+  "conn_type": "aws",
+  "login": "AKIAYQO2EQBMKY7CNUDY",
+  "password": "U51IAff/RkLJnIvq/EPxe63YC7rbOzXi4CUtj45p"
+}'

@@ -1,13 +1,14 @@
 # Astro Runtime includes the following pre-installed providers packages: https://docs.astronomer.io/astro/runtime-image-architecture#provider-packages
-apache-airflow-providers-amazon==7.4.1 # 7.4.1 ; 8.5.1
+# apache-airflow-providers-amazon==7.4.1 # 7.4.1 ; 8.5.1
 log-generator==1.0.2
 Faker
 apache-airflow-providers-postgres==5.6.0
-astronomer-cosmos==1.0.5
-dbt-redshift
+astronomer-cosmos[dbt-redshift]==1.0.3
+# dbt-redshift
 protobuf==3.20.0
 tzlocal
 openpyxl
 advertools
 # apache-airflow-providers-apache-spark==4.1.3
+# apache-airflow-providers-apache-hive==6.1.4
 # apache-airflow-providers-ssh==3.7.1

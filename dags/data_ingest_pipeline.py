@@ -98,13 +98,11 @@ def data_ingest_pipeline():
         cwd='/tmp'
     )
     
-    upload_leads_to_s3 >> convert_leads_to_csv >> upload_combined_log
-    get_fresh_appdb_dumps >> upload_combined_log
+    upload_leads_to_s3 >> convert_leads_to_csv 
     process_server_logs >> upload_combined_log
-    convert_leads_to_csv >> upload_combined_log
 
     get_fresh_appdb_dumps >> upload_appdata_to_s3
-    process_server_logs >> upload_appdata_to_s3
+    # process_server_logs >> upload_appdata_to_s3
     convert_leads_to_csv >> upload_appdata_to_s3
 
     upload_appdata_to_s3 >> load_all_data_to_staging

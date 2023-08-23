@@ -25,7 +25,7 @@ suppliers=['supplier_id','supplier_name','supplier_reg_address','supplier_email'
 supplier_products=['id','supplier_id','product_id','unit_price']
 
 
-def generate_fake_leads(no_of_leads=20):
+def generate_fake_leads(no_of_leads=200):
     """
     Note: this should run after appdb is popultaed
     """
@@ -93,7 +93,7 @@ def generate_fake_leads(no_of_leads=20):
 def read_country_code_csv(seed_length):
     data = pd.read_csv("/usr/local/airflow/include/dataset/wikipedia-iso-country-codes.csv")
     df = data[['Country','Alpha-2 code']].head(seed_length)
-    df.to_csv('country_codes.csv', index=False, header=False)
+    df.to_csv('country_codes2.csv', index=False, header=False)
     return df['Alpha-2 code'].tolist()
 
 
@@ -102,7 +102,7 @@ def generate(since_days='-800d'):
 
     #country_code
     num=10
-    c_codes=read_country_code_csv(20)
+    c_codes=read_country_code_csv(200)
     
     #company
     num = 10
@@ -244,7 +244,7 @@ def generate(since_days='-800d'):
 
     df= pd.DataFrame(prod_data)
     df.to_csv('products.csv',index=False, header=False)
-    generate_orders(10)
+    # generate_orders(350)
 
 
 def generate_orders(no_of_orders=5000, req_header=False, since_days='-800d'):

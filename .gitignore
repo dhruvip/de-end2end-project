@@ -7,6 +7,4 @@ astro
 .notes
 trash
 init-scripts/*.csv
-spark
-my_dbt
-documentation/Scree*
+airflow_connections.json
